@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:driverapp/app_screens/home.dart';
+import 'package:driverapp/app_screens/homepage.dart';
 
 void main() => runApp(new MyApp());
 
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primaryColor: Colors.white,
       ),
-      home: HomeScreen2(),
+      home: HomeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

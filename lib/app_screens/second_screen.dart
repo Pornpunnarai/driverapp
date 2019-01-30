@@ -2,12 +2,103 @@ import 'package:flutter/material.dart';
 
 class Second extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context){
-    return new Container(
-        child: new Center(
-            child: new Icon(Icons.favorite, size: 150.0, color: Colors.red)
-        )
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.redAccent,
+          title: Container(
+            padding: EdgeInsets.only(top: 15.0),
+            child: new Center(
+              child: new Column(
+                children: <Widget>[
+                  new Text('ประวัติการรับงาน',style: TextStyle(color: Colors.white),)
+                ],
+              ),
+            ),
+          ),
+        ),
+        body: Container(
+          child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) =>
+                  EntryItem(data[index]),
+              itemCount: data.length,
+          ),
+        ),
     );
+  }
+}
+
+// One entry in the multilevel list displayed by this app.
+class Entry {
+  Entry(this.title, [this.children = const <Entry>[]]);
+
+  final String title;
+  final List<Entry> children;
+}
+
+// The entire multilevel list displayed by this app.
+final List<Entry> data = <Entry>[
+  Entry(
+    'สนามบิน ประตูขาเข้า ประตู 6  - มหาวิทยาลัยเชียงใหม่ วิทยาลัยศิลปะ สื่อ และเทคโนโลยี',
+    <Entry>[
+      Entry(
+        'Section A0',
+        <Entry>[
+          Entry('Item A0.1'),
+          Entry('Item A0.2'),
+          Entry('Item A0.3'),
+        ],
+      ),
+      Entry('Section A1'),
+      Entry('Section A2'),
+    ],
+  ),
+  Entry(
+    'International Arrival Entrance 6 - Chiang Mai International Airport',
+    <Entry>[
+      Entry('Section B0'),
+      Entry('Section B1'),
+    ],
+  ),
+  Entry(
+    'สนามบินนานาชาติเชียงใหม่ ขาออก ประตู 9 - เลขที่ 177/1 หมู่ที่ 14 ถ.สุเทพ ต.สุเทพ อ.เมือง จ.เชียงใหม่ 50200',
+    <Entry>[
+      Entry('Section C0'),
+      Entry('Section C1'),
+      Entry(
+        'Section C2',
+        <Entry>[
+          Entry('Item C2.0'),
+          Entry('Item C2.1'),
+          Entry('Item C2.2'),
+          Entry('Item C2.3'),
+        ],
+      ),
+    ],
+  ),
+];
+
+
+
+
+// Displays one Entry. If the entry has children then it's displayed
+// with an ExpansionTile.
+class EntryItem extends StatelessWidget {
+  const EntryItem(this.entry);
+
+  final Entry entry;
+
+  Widget _buildTiles(Entry root) {
+    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+    return ExpansionTile(
+      key: PageStorageKey<Entry>(root),
+      title: Text(root.title),
+      children: root.children.map(_buildTiles).toList(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
   }
 }
