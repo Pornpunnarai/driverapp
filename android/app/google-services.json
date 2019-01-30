@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "244286748967",
+    "firebase_url": "https://redcar-5673e.firebaseio.com",
+    "project_id": "redcar-5673e",
+    "storage_bucket": "redcar-5673e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244286748967:android:677545200f37f9f2",
+        "android_client_info": {
+          "package_name": "com.example.driverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244286748967-n1iq1uun3qi63pf6m6ldmpngt0ebg7e9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ3pxXVOSVBkUB1YuyYpvzftBuBQJLcHE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244286748967:android:e0599219334ff0fa",
+        "android_client_info": {
+          "package_name": "redcar.flutterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244286748967-n1iq1uun3qi63pf6m6ldmpngt0ebg7e9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ3pxXVOSVBkUB1YuyYpvzftBuBQJLcHE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

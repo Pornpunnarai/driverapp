@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:driverapp/app_screens/homepage.dart';
+import 'package:driverapp/services/authentication.dart';
+import 'package:driverapp/app_screens/root_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -9,10 +10,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Driver Login App',
       theme: new ThemeData(
-        primaryColor: Colors.white,
+        primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: new RootPage(auth: new Auth()),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
+
+
