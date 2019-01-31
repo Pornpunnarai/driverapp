@@ -83,6 +83,7 @@ class _RootPageState extends State<RootPage> {
             auth: widget.auth,
             onSignedOut: _onSignedOut,
           );
+
         } else return _buildWaitingScreen();
         break;
       default:
