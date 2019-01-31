@@ -97,13 +97,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     text: 'หน้าแรก',
                   ),
                   new Tab(
+                    icon: new Icon(Icons.account_circle),
+                    text: 'ข้อมูลส่วนตัว',
+                  ),
+                  new Tab(
                     icon: new Icon(Icons.history),
                     text: 'ประวัติ',
                   ),
-                  new Tab(
-                    icon: new Icon(Icons.more),
-                    text: 'เพิ่มเติม',
-                  )
                 ],
                     indicatorColor: Colors.white,
                     labelColor:Colors.black,
@@ -111,8 +111,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     unselectedLabelColor:Colors.white)),
             body: new TabBarView(controller: controller, children: <Widget>[
               new first.First(),
+              new third.Third(),
               new second.Second(),
-              new third.Third()
+
             ]))
     );
   }

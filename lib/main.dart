@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Driver Login App',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.white,
       ),
       home: new RootPage(auth: new Auth()),
 //      home:  HomeScreen(),
@@ -18,6 +18,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 
