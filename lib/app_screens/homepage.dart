@@ -110,9 +110,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     labelStyle:TextStyle(fontSize: 17.0),
                     unselectedLabelColor:Colors.white)),
             body: new TabBarView(controller: controller, children: <Widget>[
-              new first.First(),
-              new third.Third(),
+              new first.First(
+                  userId: widget.userId,
+                  auth: widget.auth,
+                  onSignedOut: widget.onSignedOut
+              ),
+//              new third.Third(
+//                  userId: widget.userId,
+//                  auth: widget.auth,
+//                  onSignedOut: widget.onSignedOut
+//              ),
               new second.Second(),
+              new third.Third(),
 
             ]))
     );

@@ -34,6 +34,7 @@ class _RootPageState extends State<RootPage> {
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
+
   }
 
   void _onLoggedIn() {
@@ -81,9 +82,8 @@ class _RootPageState extends State<RootPage> {
           return new HomeScreen(
             userId: _userId,
             auth: widget.auth,
-            onSignedOut: _onSignedOut,
+            onSignedOut: _onSignedOut
           );
-//        return new HomeScreen();
         } else return _buildWaitingScreen();
         break;
       default:
