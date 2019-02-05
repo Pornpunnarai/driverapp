@@ -6,6 +6,10 @@ import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import 'package:flutter/services.dart';
+
+
+
 class First extends StatefulWidget {
   First({Key key, this.auth, this.userId, this.onSignedOut})
       : super(key: key);
@@ -24,13 +28,14 @@ class First extends StatefulWidget {
 
 class _FirstState extends State<First> {
 
-
+//  Map<String, double> _startLocation;
   Map<String, double> _currentLocation;
 
   StreamSubscription<Map<String, double>> _locationSubscription;
 
   Location _location = new Location();
-
+  bool _permission = false;
+  String error;
 
   GoogleMapController mapController;
   MapType _currentMapType = MapType.normal;
@@ -75,27 +80,72 @@ class _FirstState extends State<First> {
     _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(_onEntryAdded);
     _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);
 
+    initPlatformState();
+
     _locationSubscription =
         _location.onLocationChanged().listen((Map<String,double> result) {
-          setState(() {
-            _currentLocation = result;
-          });
+      setState(() {
+        _currentLocation = result;
+      });
+      print("aaaa");
+      print(_currentLocation);
+      if (mapController!=null){
+        print(_currentLocation);
 
-            mapController.animateCamera(
-                CameraUpdate.newCameraPosition(CameraPosition(
-                    target: _currentLocation == null ? LatLng(0, 0) : LatLng(
-                        _currentLocation["latitude"],
-                        _currentLocation["longitude"]), zoom: 15.0)));
+        Todo todo = new Todo(
+            _currentLocation["longitude"].toString(), widget.userId, false);
+        _database.reference().child("todo").child(widget.userId).set(todo.toJson());
+
+        mapController.animateCamera(
+            CameraUpdate.newCameraPosition(CameraPosition(
+                target: _currentLocation == null ? LatLng(0,0) : LatLng(
+                    _currentLocation["latitude"],
+                    _currentLocation["longitude"]), zoom: 15.0)));
+    }
 
         });
   }
 
-  @override
-  void dispose() {
-    _onTodoAddedSubscription.cancel();
-    _onTodoChangedSubscription.cancel();
-    super.dispose();
+
+
+  initPlatformState() async {
+    Map<String, double> location;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
+    try {
+      _permission = await _location.hasPermission();
+      location = await _location.getLocation();
+
+
+      error = null;
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'Permission denied';
+      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error = 'Permission denied - please ask the user to enable it from the app settings';
+      }
+
+      location = null;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    //if (!mounted) return;
+
+//    setState(() {
+//      _startLocation = location;
+//    });
+
   }
+
+
+  @override
+//  void dispose() {
+////    _onTodoAddedSubscription.cancel();
+////    _onTodoChangedSubscription.cancel();
+//    super.dispose();
+//  }
 
   _onEntryChanged(Event event) {
     var oldEntry = _todoList.singleWhere((entry) {
@@ -127,18 +177,25 @@ class _FirstState extends State<First> {
     }
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated (GoogleMapController controller) async {
     mapController = controller;
-//    refresh();
 
+    mapController.moveCamera(
+        CameraUpdate.newCameraPosition(CameraPosition(
+            target: _currentLocation == null ? LatLng(0,0) : LatLng(
+                _currentLocation["latitude"],
+                _currentLocation["longitude"]), zoom: 15.0)));
+//    refresh();
   }
 
 
   @override
   Widget build(BuildContext context) {
-
-
-
+//if(_currentLocation!=null) {
+//  Todo todo = new Todo(
+//      _currentLocation["longitude"].toString(), widget.userId, false);
+//  _database.reference().child("todo").child(widget.userId).set(todo.toJson());
+//}
 
     assert (debugCheckHasMediaQuery(context));
     return Scaffold(
@@ -169,19 +226,36 @@ class _FirstState extends State<First> {
           ),
         ),
       ),
-      body: Container(
-        child: new Center(
-//          child: new Text('Google Map Page', style : TextStyle(fontSize: 40.0, color: Colors.green)),
-          child: GoogleMap(
+//      body: Container(
+//        child: new Center(
+////          child: new Text('Google Map Page', style : TextStyle(fontSize: 40.0, color: Colors.green)),
+//          child: GoogleMap(
+//            onMapCreated: _onMapCreated,
+//            options: GoogleMapOptions(
+//                trackCameraPosition: true,
+//                cameraPosition:
+//                const CameraPosition(target: LatLng(0.0, 0.0),zoom: 15.0),
+//              myLocationEnabled: true,
+//            ),
+//          ),
+//        ),
+//      ),
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
             onMapCreated: _onMapCreated,
             options: GoogleMapOptions(
-                trackCameraPosition: true,
+              trackCameraPosition: true,
                 cameraPosition:
                 const CameraPosition(target: LatLng(0.0, 0.0),zoom: 15.0),
-                myLocationEnabled: true
+//              cameraPosition: CameraPosition(
+//                target: LatLng(_startLocation["latitude"],_startLocation["longitude"]),
+//                  zoom: 15.0
+//              ),
+              myLocationEnabled: true,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
