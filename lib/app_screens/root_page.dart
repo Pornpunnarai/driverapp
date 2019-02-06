@@ -71,6 +71,8 @@ class _RootPageState extends State<RootPage> {
         .child("todo")
         .orderByChild("userId")
         .equalTo(_userId);
+
+
     _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(_onEntryAdded);
     _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);
 
@@ -82,10 +84,13 @@ class _RootPageState extends State<RootPage> {
             _currentLocation = result;
           });
 
-          print(_currentLocation);
+//          print(_currentLocation);
+          if(authStatus==AuthStatus.LOGGED_IN) {
             Todo todo = new Todo(
                 _currentLocation["longitude"].toString(), _userId, false);
-            _database.reference().child("todo").child(_userId).set(todo.toJson());
+            _database.reference().child("todo").child(_userId).set(
+                todo.toJson());
+          }
 
         });
   }
@@ -184,7 +189,8 @@ class _RootPageState extends State<RootPage> {
           return new HomeScreen(
             userId: _userId,
             auth: widget.auth,
-            onSignedOut: _onSignedOut
+            onSignedOut: _onSignedOut,
+              currentLocation:  _currentLocation
           );
         } else return _buildWaitingScreen();
         break;

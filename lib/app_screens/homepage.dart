@@ -7,13 +7,13 @@ import 'package:driverapp/app_screens/third_screen.dart' as third;
 
 class HomeScreen extends StatefulWidget {
 
-  HomeScreen({Key key, this.auth, this.userId, this.onSignedOut})
+  HomeScreen({Key key, this.auth, this.userId, this.onSignedOut, this.currentLocation})
       : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   final String userId;
-
+  final Map<String, double> currentLocation;
 
   @override
   _HomeScreenState createState() => new _HomeScreenState();
@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: _body(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -65,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         return first.First(
             userId: widget.userId,
             auth: widget.auth,
-            onSignedOut: widget.onSignedOut
+            onSignedOut: widget.onSignedOut,
+            currentLocation: widget.currentLocation
         );
       case 1:
         return second.Second();
