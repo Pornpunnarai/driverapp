@@ -201,6 +201,7 @@ class _FirstState extends State<First> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
+          padding: EdgeInsets.only(top: 20.0),
           child: new Center(
             child: new Column(
               children: <Widget>[

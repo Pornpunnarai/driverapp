@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
 import 'package:driverapp/services/authentication.dart';
-import 'package:firebase_database/firebase_database.dart';
-
-import 'package:driverapp/models/todo.dart';
 import 'package:driverapp/app_screens/first_screen.dart' as first;
 import 'package:driverapp/app_screens/second_screen.dart' as second;
 import 'package:driverapp/app_screens/third_screen.dart' as third;
-import 'custom_bottom_bar.dart';
+
 
 class HomeScreen extends StatefulWidget {
 
@@ -27,74 +20,115 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-//  List<Todo> _todoList;
+  final int _pageCount = 3;
+  int _pageIndex = 0;
 
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
-
-//  StreamSubscription<Event> _onTodoAddedSubscription;
-//  StreamSubscription<Event> _onTodoChangedSubscription;
-
-
-  TabController controller;
+  final List<BottomNavigationBarItem> bottomBarItems =[];
+  final bottomNavigationBarItemStyle = TextStyle(fontSize:17.0, fontStyle: FontStyle.normal, color:Colors.black);
 
 
-//  Query _todoQuery;
-
-
-  @override
-  void initState() {
-    super.initState();
-    controller = new TabController(vsync: this, length: 3);
-
-//    _todoList = new List();
-//    _todoQuery = _database
-//        .reference()
-//        .child("todo")
-//        .orderByChild("userId")
-//        .equalTo(widget.userId);
-//    _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(_onEntryAdded);
-//    _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);
-
-  }
-
-  @override
-  void dispose() {
-//    _onTodoAddedSubscription.cancel();
-//    _onTodoChangedSubscription.cancel();
-    controller.dispose();
-    super.dispose();
-  }
-
-
-//  _onEntryChanged(Event event) {
-//    var oldEntry = _todoList.singleWhere((entry) {
-//      return entry.key == event.snapshot.key;
-//    });
-//
-//    setState(() {
-//      _todoList[_todoList.indexOf(oldEntry)] = Todo.fromSnapshot(event.snapshot);
-//    });
-//  }
-
-  _signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomBottomBar(),
+      body: _body(),
+      bottomNavigationBar: _bottomNavigationBar(),
     );
-    first.First(
-                  userId: widget.userId,
-                  auth: widget.auth,
-                  onSignedOut: widget.onSignedOut
-              );
+  }
+
+  Widget _body() {
+    return Container(
+      child: Stack(
+        children: List<Widget>.generate(_pageCount, (int index) {
+          return IgnorePointer(
+            ignoring: index != _pageIndex,
+            child: Opacity(
+              opacity: _pageIndex == index ? 1.0 : 0.0,
+              child: Navigator(
+                onGenerateRoute: (RouteSettings settings) {
+                  return new MaterialPageRoute(
+                    builder: (_) => _page(index),
+                    settings: settings,
+                  );
+                },
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _page(int index) {
+    switch (index) {
+      case 0:
+        return first.First(
+            userId: widget.userId,
+            auth: widget.auth,
+            onSignedOut: widget.onSignedOut
+        );
+      case 1:
+        return second.Second();
+      case 2:
+        return third.Third(
+            userId: widget.userId,
+            auth: widget.auth,
+            onSignedOut: widget.onSignedOut
+        );
+    }
+
+    throw "Invalid index $index";
+  }
+
+  BottomNavigationBar _bottomNavigationBar() {
+//    final theme = Theme.of(context);
+    return new BottomNavigationBar(
+//      fixedColor: theme.accentColor,
+      currentIndex: _pageIndex,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home,
+            color: Colors.black,
+          ),
+          title: Text("หน้าแรก", style: bottomNavigationBarItemStyle),
+        ),
+        BottomNavigationBarItem(
+    icon: Icon(
+          Icons.account_circle,
+          color: Colors.black,
+        ),
+        title: Text("ข้อมูลส่วนตัว", style: bottomNavigationBarItemStyle),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.history,
+            color: Colors.black,
+          ),
+          title: Text("ประวัติ", style: bottomNavigationBarItemStyle),
+        ),
+      ],
+      onTap: (int index) {
+        setState(() {
+          _pageIndex = index;
+        });
+      },
+    );
+  }
+
+
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      bottomNavigationBar: CustomBottomBar( userId: widget.userId,
+//          auth: widget.auth,
+//          onSignedOut: widget.onSignedOut),
+//    );
+//    first.First(
+//                  userId: widget.userId,
+//                  auth: widget.auth,
+//                  onSignedOut: widget.onSignedOut
+//              );
 //    return Material(
 //        child: Scaffold(
 //            bottomNavigationBar: new Material(
@@ -134,5 +168,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 //
 //            ]))
 //    );
-  }
+
+
+
+
+//  }
 }
