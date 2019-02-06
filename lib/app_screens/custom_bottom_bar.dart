@@ -9,6 +9,10 @@ class CustomBottomBar extends StatelessWidget {
   CustomBottomBar(){
     bottomBarItems.add(
       BottomNavigationBarItem(
+        activeIcon: Icon(
+          Icons.home,
+          color: appTheme.primaryColor,
+        ),
           icon: Icon(
             Icons.home,
             color: Colors.black,

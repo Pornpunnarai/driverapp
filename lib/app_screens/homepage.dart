@@ -10,7 +10,7 @@ import 'package:driverapp/models/todo.dart';
 import 'package:driverapp/app_screens/first_screen.dart' as first;
 import 'package:driverapp/app_screens/second_screen.dart' as second;
 import 'package:driverapp/app_screens/third_screen.dart' as third;
-
+import 'custom_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -87,7 +87,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return first.First(
+    return Scaffold(
+      bottomNavigationBar: CustomBottomBar(),
+    );
+    first.First(
                   userId: widget.userId,
                   auth: widget.auth,
                   onSignedOut: widget.onSignedOut
