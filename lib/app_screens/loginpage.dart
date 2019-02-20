@@ -156,6 +156,7 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.circular(5.0)
             )
         ),
+        obscureText: true,
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
         onSaved: (value) => _password = value,
       ),

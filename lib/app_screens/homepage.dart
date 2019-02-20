@@ -3,6 +3,7 @@ import 'package:driverapp/services/authentication.dart';
 import 'package:driverapp/app_screens/first_screen.dart' as first;
 import 'package:driverapp/app_screens/second_screen.dart' as second;
 import 'package:driverapp/app_screens/third_screen.dart' as third;
+import 'package:driverapp/app_screens/job.dart' as job;
 
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  final int _pageCount = 3;
+  final int _pageCount = 4;
   int _pageIndex = 0;
 
   final List<BottomNavigationBarItem> bottomBarItems =[];
@@ -77,6 +78,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             auth: widget.auth,
             onSignedOut: widget.onSignedOut
         );
+
+      case 3:
+        return job.Jobpage();
     }
 
     throw "Invalid index $index";
@@ -96,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           title: Text("หน้าแรก", style: bottomNavigationBarItemStyle),
         ),
         BottomNavigationBarItem(
-    icon: Icon(
+        icon: Icon(
           Icons.account_circle,
           color: Colors.black,
         ),
@@ -108,6 +112,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             color: Colors.black,
           ),
           title: Text("ประวัติ", style: bottomNavigationBarItemStyle),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.directions_car,
+            color: Colors.black,
+          ),
+          title: Text("Test", style: bottomNavigationBarItemStyle),
         ),
       ],
       onTap: (int index) {

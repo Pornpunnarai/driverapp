@@ -33,7 +33,7 @@ class _ThirdState extends State<Third> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Color(0xFFD84315),
         title: Container(
           padding: EdgeInsets.only(top: 15.0),
           child: new Center(
@@ -56,7 +56,7 @@ class _ThirdState extends State<Third> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Colors.red)
+                        border: Border.all(color: Color(0xFFD84315))
                     ),
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.center,

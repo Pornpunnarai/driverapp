@@ -5,7 +5,7 @@ class Second extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Color(0xFFD84315),
           title: Container(
             padding: EdgeInsets.only(top: 15.0),
             child: new Center(

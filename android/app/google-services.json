@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:244286748967:android:677545200f37f9f2",
+        "mobilesdk_app_id": "1:244286748967:android:cc035fe9eb11823d",
         "android_client_info": {
-          "package_name": "com.example.driverapp"
+          "package_name": "com.siamdapp.driverapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "244286748967-h4s23seo15o9fo7i7i60ggsin51k5qs1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.siamdapp.driverapp",
+            "certificate_hash": "26a4315552a209f9ce35d372b314ace229ebd1a3"
+          }
+        },
         {
           "client_id": "244286748967-n1iq1uun3qi63pf6m6ldmpngt0ebg7e9.apps.googleusercontent.com",
           "client_type": 3
@@ -29,8 +37,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "244286748967-n1iq1uun3qi63pf6m6ldmpngt0ebg7e9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "244286748967-ljmhsa69pd9p4c6bi8doomo6g15q2qhr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.siamdapp.driverapp"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -1,4 +1,4 @@
-package com.example.driverapp;
+package com.siamdapp.driverapp;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
