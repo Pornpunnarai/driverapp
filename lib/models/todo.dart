@@ -5,23 +5,20 @@ class Todo {
   String subject;
   bool completed;
   String userId;
-  String test;
 
-  Todo(this.subject, this.userId, this.completed, this.test);
+  Todo(this.subject, this.userId, this.completed);
 
   Todo.fromSnapshot(DataSnapshot snapshot) :
     key = snapshot.key,
     userId = snapshot.value["userId"],
     subject = snapshot.value["subject"],
-    completed = snapshot.value["completed"],
-    test = snapshot.value["test"];
+    completed = snapshot.value["completed"];
 
   toJson() {
     return {
       "userId": userId,
       "subject": subject,
       "completed": completed,
-      "test": test
     };
   }
 }
