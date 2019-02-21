@@ -5,9 +5,9 @@ import 'package:driverapp/app_screens/homepage.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:driverapp/models/todo.dart';
+import 'package:driverapp/models/move.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_compass/flutter_compass.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -33,6 +33,7 @@ class _RootPageState extends State<RootPage> {
 
 
   Map<String, double> _currentLocation;
+  double _direction;
 
   StreamSubscription<Map<String, double>> _locationSubscription;
 
@@ -42,14 +43,14 @@ class _RootPageState extends State<RootPage> {
 
 
 
-  List<Todo> _todoList;
+  List<Move> _moveList;
 
   final FirebaseDatabase _database = FirebaseDatabase.instance;
 
-  StreamSubscription<Event> _onTodoAddedSubscription;
-  StreamSubscription<Event> _onTodoChangedSubscription;
+  StreamSubscription<Event> _onMoveAddedSubscription;
+  StreamSubscription<Event> _onMoveChangedSubscription;
 
-  Query _todoQuery;
+  Query _moveQuery;
 
 
   @override
@@ -59,22 +60,14 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         if (user != null) {
           _userId = user?.uid;
+          initialDatabase(_userId);
         }
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
 
-    _todoList = new List();
-    _todoQuery = _database
-        .reference()
-        .child("todo")
-        .orderByChild("userId")
-        .equalTo(_userId);
 
-
-    _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(_onEntryAdded);
-    _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);
 
     initPlatformState();
 
@@ -84,15 +77,38 @@ class _RootPageState extends State<RootPage> {
             _currentLocation = result;
           });
 
-//          print(_currentLocation);
           if(authStatus==AuthStatus.LOGGED_IN) {
-            Todo todo = new Todo(
-                _currentLocation["longitude"].toString(), _userId, false);
-            _database.reference().child("todo").child(_userId).set(
-                todo.toJson());
+            Move move = new Move(
+                _userId, "test", _currentLocation["latitude"],
+                _currentLocation["longitude"], _direction,
+                true);
+                            _database.reference().child("move").child(_userId).set(
+                    move.toJson());
           }
 
         });
+
+
+    FlutterCompass.events.listen((double direction) {
+      setState(() {
+        _direction = direction;
+      });
+    });
+
+  }
+
+  initialDatabase (String userId){
+    _moveList = new List();
+    _moveQuery = _database
+        .reference()
+        .child("move")
+        .orderByChild("userId")
+        .equalTo(userId);
+    _onMoveAddedSubscription = _moveQuery.onChildAdded.listen(_onEntryAdded);
+    _onMoveChangedSubscription = _moveQuery.onChildChanged.listen(_onEntryChanged);
+
+
+
   }
 
   initPlatformState() async {
@@ -145,20 +161,30 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _onChangeStatus() {
+    _moveList[0].status = !_moveList[0].status;
+    if (_moveList[0] != null) {
+      _database.reference().child("move").child(_userId).set(_moveList[0].toJson());
+//      _moveList[0].status = !_moveList[0].status;
+    }
+
+    print("ssssssssssssssssssss");
+  }
 
   _onEntryChanged(Event event) {
-    var oldEntry = _todoList.singleWhere((entry) {
+    var oldEntry = _moveList.singleWhere((entry) {
       return entry.key == event.snapshot.key;
     });
 
     setState(() {
-      _todoList[_todoList.indexOf(oldEntry)] = Todo.fromSnapshot(event.snapshot);
+      _moveList[_moveList.indexOf(oldEntry)] = Move.fromSnapshot(event.snapshot);
     });
   }
 
   _onEntryAdded(Event event) {
     setState(() {
-      _todoList.add(Todo.fromSnapshot(event.snapshot));
+      _moveList.add(Move.fromSnapshot(event.snapshot));
+
     });
   }
 
@@ -185,12 +211,14 @@ class _RootPageState extends State<RootPage> {
         );
         break;
       case AuthStatus.LOGGED_IN:
-        if (_userId.length > 0 && _userId != null) {
+        if (_userId.length > 0 && _userId != null &&_moveList.length  > 0) {
           return new HomeScreen(
             userId: _userId,
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-              currentLocation:  _currentLocation
+              currentLocation:  _currentLocation,
+              onChangeStatus: _onChangeStatus,
+              status: _moveList[0].status
           );
         } else return _buildWaitingScreen();
         break;
